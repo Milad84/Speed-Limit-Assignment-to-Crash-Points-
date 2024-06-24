@@ -1,6 +1,6 @@
 # Speed Limit Assignment to Crash Points
 
-This repository contains a script to assign speed limit data from street segments to crash points. The script uses ArcPy to perform spatial analysis and ensures accurate speed limit assignments, even at intersections where multiple streets may intersect.
+This repository contains a script to assign speed limit data from street segments to crash points. The script uses ArcPy to perform spatial analysis within ArcGIS Pro, ensuring accurate speed limit assignments, even at intersections where multiple streets may intersect.
 
 ## Features
 
@@ -23,7 +23,7 @@ This repository contains a script to assign speed limit data from street segment
    - Modify the `streets_fc` variable to point to your street layer.
    - Modify the `crashes_fc` variable to point to your crash points layer.
 
-2. **Run the Script:** Execute the script in an ArcGIS Pro environment.
+2. **Run the Script:** Execute the script in an ArcGIS Pro environment using ArcPy.
 
 3. **Check Output:** The `Assigned_Speed_Limit` field in the `Crashes` layer will be updated with the appropriate speed limits.
 
@@ -48,8 +48,8 @@ This project is licensed under the MIT License.
 
 ## Contact
 
-If you have any questions or need further assistance, feel free to open an issue or contact us.
+If you have any questions or need further assistance, please open an issue or contact me.
 
 ## File Structure
 
-- `assign_speed_limits.py`: Script to assign speed limits to crash points using ArcPy.
+- `assign_speed_limits.py`: Script to assign speed limits to crash points using ArcPy within ArcGIS Pro.
