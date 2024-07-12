@@ -203,7 +203,7 @@ try:
         dbname="YOUR_DATABASE",
         user="YOUR_USERNAME",
         password="YOUR_PASSWORD",
-        host="YOUR_HOSTIN_PATH"
+        host="YOUR_HOSTING_PATH"
     )
     cursor = conn.cursor()
     cursor.execute("SELECT crash_id, crash_speed_limit FROM public.atd_txdot_crashes")
