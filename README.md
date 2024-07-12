@@ -1,6 +1,10 @@
 # Speed Limit Assignment to Crash Points
 
-This repository contains a script that assigns speed limit data from street segments to crash points. The script uses ArcPy to perform spatial analysis within ArcGIS Pro, ensuring accurate speed limit assignments, even at intersections where multiple streets may intersect. Additionally, the script retrieves and compares speed limit data from a PostgreSQL database hosted on AWS.
+This repository contains a series of scripts that assign speed limit data from street segments to crash points. The scripts use ArcPy to perform spatial analysis within ArcGIS Pro, ensuring accurate speed limit assignments, even at intersections where multiple streets may intersect. Additionally, the script retrieves and compares speed limit data from a PostgreSQL database hosted on AWS.
+
+## Final Code 
+
+The Final Code contains all the features from the previous three attempts. I am keeping all the attempts for my record and how I solved every problem step by step.
 
 ## Features
 
