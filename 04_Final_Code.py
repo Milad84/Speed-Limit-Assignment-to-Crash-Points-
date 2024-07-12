@@ -200,10 +200,10 @@ try:
 
     # Connect to the PostgreSQL database and retrieve speed limits
     conn = psycopg2.connect(
-        dbname="atd_vz_data",
-        user="kordem",
-        password="cEEFMT46vWoEiZ6kcuvX",
-        host="db-rr.vision-zero.austinmobility.io"
+        dbname="YOUR_DATABSE",
+        user="YOUR_USERNAME",
+        password="YOUR_PASSWORD",
+        host="YOUR_HOSTING_URL"
     )
     cursor = conn.cursor()
     cursor.execute("SELECT crash_id, crash_speed_limit FROM public.atd_txdot_crashes")
