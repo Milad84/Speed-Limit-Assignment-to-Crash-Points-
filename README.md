@@ -28,6 +28,14 @@ The project follows these steps to achieve the desired speed limit assignment:
 1. **Assign the highest speed limit** from intersecting streets if the crash is near an intersection.
 2. **Assign the speed limit from the nearest street segment** if the crash is not near an intersection.
 
+## Approach
+
+The approach involves creating a buffer around each intersection point to determine if a crash is near an intersection. The size of the buffer is determined based on the combination of street levels at the intersection. 
+
+- **Intersection Buffering:** Buffers are created around intersection points, with sizes based on street level combinations (e.g., a combination of street levels 1 and 2 might get a 30-foot buffer, while a combination involving street level 4 might get a 50-foot buffer).
+- **Near_Intersection Field:** Each crash point is checked to see if it falls within any of the intersection buffers. If it does, the `Near_Intersection` field is set to 1; otherwise, it is set to NULL.
+- **Speed Limit Assignment:** For crashes near intersections (those with `Near_Intersection` set to 1), the highest speed limit from the intersecting streets is assigned. For other crashes, the speed limit from the nearest street segment is assigned.
+
 ## Usage Instructions
 
 1. **Update the Input Paths:**
