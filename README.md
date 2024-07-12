@@ -4,17 +4,29 @@ This repository contains a script that assigns speed limit data from street segm
 
 ## Features
 
-- **Input:** Street segment feature class (`CTN_AFP`) and crash points feature class (`Crashes`).
+- **Input:** Street segment feature class (`CTN_AFP_Subset_2`) and crash points feature class (`Crashes_Subset_2`).
 - **Output:** Crash points feature class with an added field for assigned speed limits.
 - **Temporary Storage:** Uses a temporary file geodatabase to store intermediate results.
 
-## Script Details
+## Methodology
 
-- **Buffer Creation:** Creates a buffer around each crash point and iteratively increases the buffer size until a street segment is intersected.
-- **Spatial Join:** Performs a spatial join to assign speed limits from intersecting street segments to crash points.
-- **Field Addition:** Adds a new field `Assigned_Speed_Limit` to the `Crashes` layer.
-- **Speed Limit Assignment:** Assigns the maximum speed limit from intersecting streets to the crash points.
-- **Cleanup:** Deletes intermediate files to free up space.
+The project follows these steps to achieve the desired speed limit assignment:
+
+### Step 1: Create Buffers Around Intersection Points
+
+1. **Identify intersection points** from the street segments.
+2. **Determine the street levels** of the intersecting streets at each intersection point.
+3. **Create buffers** around the intersection points with sizes determined by the combination of street levels.
+
+### Step 2: Assign Near_Intersection Field
+
+1. **Check if each crash point** falls within any buffer.
+2. **Update the Near_Intersection field** to 1 if the crash is within a buffer, otherwise set it to NULL.
+
+### Step 3: Assign Speed Limits
+
+1. **Assign the highest speed limit** from intersecting streets if the crash is near an intersection.
+2. **Assign the speed limit from the nearest street segment** if the crash is not near an intersection.
 
 ## Usage Instructions
 
@@ -44,8 +56,3 @@ Contributions are welcome! Please fork this repository and submit pull requests.
 ## License
 
 This project is licensed under the MIT License.
-
-## Contact
-
-If you have any questions or need further assistance, feel free to open an issue or contact us.
-
