@@ -47,7 +47,7 @@ The process of assigning speed limits to crash points involves several steps:
 2. **Run the Script:** Execute the script in an ArcGIS Pro environment.
 
 3. **Check Output:**
-    - The `Assigned_Speed_Limit` and `DB_Speed_Limit` fields in the `Crashes` layer will be updated with the appropriate speed limits.
+    - The `Assigned_Speed_Limit` and `DB_Speed_Limit` fields in the `Crashes` (Crashes_Subset_2_Copy) layer will be updated with the appropriate speed limits.
     - The buffers around intersections will be stored in the `Customized_Buffers` feature class in your project geodatabase.
 
 ##
