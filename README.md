@@ -1,50 +1,53 @@
 # Speed Limit Assignment to Crash Points
 
-This repository contains a series of scripts that assign speed limit data from street segments to crash points. The scripts use ArcPy to perform spatial analysis within ArcGIS Pro, ensuring accurate speed limit assignments, even at intersections where multiple streets may intersect. Additionally, the script retrieves and compares speed limit data from a PostgreSQL database hosted on AWS.
+This repository contains a series of scripts that assign speed limit data from street segments to crash points. The scripts use ArcPy to perform spatial analysis within ArcGIS Pro, ensuring accurate speed limit assignments, even at intersections where multiple streets may intersect.
 
-## Final Code 
-
-The Final Code contains all the features from the previous three attempts. I am keeping all the attempts for my record and how I solved every problem step by step.
+# Final Code
+Although the Final Code is the last version of tested software, previous versions (starting with numbers) record all the steps to get to where I am now with the final code. All the earlier attempts are kept for my record. 
 
 ## Features
 
-- **Input:**
-  - Street segment feature class (`CTN_AFP_Subset_2`)
-  - Crash points feature class (`Crashes_Subset_2`)
-  - Intersection points feature class (`Intersections`)
-- **Output:**
-  - Crash points feature class with added fields for assigned speed limits from street segments and AWS database.
+- **Input:** Street segment feature class (`CTN_AFP_Subset_2`) and crash points feature class (`Crashes_Subset_2`).
+- **Output:** Crash points feature class with added fields for assigned speed limits (`Assigned_Speed_Limit`) and database speed limits (`DB_Speed_Limit`).
+- **Intersection Handling:** Uses customized buffer sizes based on street levels at intersections to ensure accurate speed limit assignments.
 - **Temporary Storage:** Uses a temporary file geodatabase to store intermediate results.
+- **Database Integration:** Fetches additional speed limit data from an AWS-hosted PostgreSQL database and integrates it with the crash data.
 
 ## Approach
 
-1. **Buffer Creation:**
-   - Creates buffers around intersection points with initial default size.
-   - Adjusts buffer sizes based on the street levels of intersecting streets.
+The process of assigning speed limits to crash points involves several steps:
 
-2. **Field Addition:**
-   - Adds a field `Near_Intersection` to flag crashes near intersections.
-   - Adds fields `Assigned_Speed_Limit` and `DB_Speed_Limit` to store speed limits from street segments and AWS database.
+1. **Buffer Creation Around Intersections:**
+    - Intersection points are identified by intersecting street segments.
+    - Initial buffers with a default radius of 15 feet are created around these intersection points.
+    - Buffer sizes are then adjusted based on the street levels of the intersecting streets. For instance, different combinations of street levels result in different buffer sizes as defined in the `buffer_size_mapping`.
+
+2. **Flagging Crashes Near Intersections:**
+    - Crash points are checked to see if they fall within any of the customized buffers.
+    - The `Near_Intersection` field is updated to `1` for crash points within the buffers and `NULL` for those outside.
 
 3. **Speed Limit Assignment:**
-   - Assigns speed limits from the nearest street segment to each crash point.
-   - If a crash is near an intersection, assigns the highest speed limit from the intersecting streets.
-   - Retrieves speed limit data from the AWS PostgreSQL database and updates the crash points with this data.
+    - For crash points near intersections (i.e., those within the buffers), the highest speed limit from all intersecting street segments is assigned to ensure safety considerations.
+    - For crash points not near intersections, the speed limit is determined based on the closest street segment using the nearest neighbor search.
 
-4. **Cleanup:**
-   - Deletes intermediate files to free up space.
-   - Ensures buffers around intersections are retained in the project geodatabase.
+4. **Integration with Database:**
+    - Connects to a PostgreSQL database hosted on AWS to fetch additional speed limit data (`crash_speed_limit`).
+    - Updates the crash points with this additional speed limit data using the `Crash_Id` field for joining the local crash data with the database records.
 
-## Requirements
+5. **Cleanup:**
+    - Intermediate files and layers are deleted to manage disk space and maintain a clean working environment.
 
-- ArcGIS Pro
-- ArcPy
-- psycopg2 (for PostgreSQL database connection)
+## Usage Instructions
 
-## Installation
+1. **Update the Input Paths:**
+    - Modify the `streets_fc` variable to point to your street layer.
+    - Modify the `crashes_fc` variable to point to your crash points layer.
+    - Modify the `project_gdb` variable to point to your project geodatabase.
 
-1. Ensure you have ArcGIS Pro installed.
-2. Clone this repository to your local machine.
-3. Install the `psycopg2` package:
-   ```bash
-   pip install psycopg2
+2. **Run the Script:** Execute the script in an ArcGIS Pro environment.
+
+3. **Check Output:**
+    - The `Assigned_Speed_Limit` and `DB_Speed_Limit` fields in the `Crashes` layer will be updated with the appropriate speed limits.
+    - The buffers around intersections will be stored in the `Customized_Buffers` feature class in your project geodatabase.
+
+##
