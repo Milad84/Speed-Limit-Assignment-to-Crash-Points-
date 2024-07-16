@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/67d24263-996d-4337-ba80-2934610a1363)
+
 Sample of output showing intersection buffer and crash points categorized based on different speed limits.
 
 # Speed Limit Assignment to Crash Points
