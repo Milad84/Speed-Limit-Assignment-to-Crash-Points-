@@ -4,7 +4,11 @@ Sample of output showing intersection buffer and crash points categorized based 
 
 # Speed Limit Assignment to Crash Points
 
-This repository contains a script that assigns speed limit data from street segments to crash points. The script uses ArcPy to perform spatial analysis within ArcGIS Pro, ensuring accurate speed limit assignments, even at intersections where multiple streets may intersect.
+This repository contains a series of scripts that assign speed limit data from street segments and the AWS database to crash points. The script uses ArcPy to perform spatial analysis within ArcGIS Pro, ensuring accurate speed limit assignments, even at intersections where multiple streets may intersect.
+
+# Final Code
+
+The final Code contains the most recent attempt. All the other numbered attempts are kept for personal records and show the process to the final version of the code.
 
 ## Features
 
@@ -17,7 +21,7 @@ This repository contains a script that assigns speed limit data from street segm
 ### Buffer Creation
 
 - Creates buffers around intersection points with an initial default size of 15 feet.
-- Buffer sizes are adjusted based on street level combinations at intersections.
+- Buffer sizes are adjusted based on street-level combinations at intersections.
 
 ### Street Level Intersection
 
@@ -27,7 +31,7 @@ This repository contains a script that assigns speed limit data from street segm
 ### Speed Limit Assignment
 
 - For crashes near intersections, the highest speed limit from the intersecting street segments within the buffer is assigned to the crash point.
-- For crashes not near intersections, the speed limit from the nearest street segment is assigned.
+- The speed limit from the nearest street segment is assigned for crashes that are not near intersections.
 
 ### Database Speed Limit Assignment
 
@@ -52,7 +56,7 @@ This repository contains a script that assigns speed limit data from street segm
 
 4. ![image](https://github.com/user-attachments/assets/9bb0f39f-9646-4b6d-8de1-d1ff2ff0a46c)
 
-    Sample of output table in ArcPro where three new fields bring the results of the code.
+    Sample of output table in ArcPro where three new fields bring the results of the code. Null value under the Near_Intersection indicates that the crash is not falling inside the intersection buffer, while value 1 means it is inside the buffer and considered as a crash close to the intersection. Assigned_Speed_Limit inherits the speed limit coming from the CTN (street feature). DB_Speed_Limit records the speed limit coming from the CR3 where NULL and -1 mean no speed limit is assigned.
 
 
 ## Script Details
@@ -79,7 +83,7 @@ def get_buffer_size(street_levels):
     return buffer_size_mapping.get(street_levels_set, default_buffer_size)
 ```
 ## Speed Limit Assignment from Street Segments
-The script assigns speed limits to crash points based on their proximity to street segments. The highest speed limit from the intersecting streets within the buffer is used for crashes near intersections. For crashes not near intersections, the nearest street segment's speed limit is assigned.
+The script assigns speed limits to crash points based on their proximity to street segments. For crashes near intersections, the highest speed limit from the intersecting streets within the buffer is used, while the nearest street segment's speed limit is assigned for crashes not near intersections.
 
 with arcpy.da.UpdateCursor(output_copy_fc, ["OBJECTID", "SHAPE@", "Assigned_Speed_Limit", "Near_Intersection", "Crash_Id", "DB_Speed_Limit"]) as cursor:
     for row in cursor:
@@ -132,10 +136,10 @@ The script connects to an AWS PostgreSQL database to retrieve additional speed l
 ``` python
 # Connect to the PostgreSQL database and retrieve speed limits
 conn = psycopg2.connect(
-    dbname="atd_vz_data",
-    user="kordem",
-    password="cEEFMT46vWoEiZ6kcuvX",
-    host="db-rr.vision-zero.austinmobility.io"
+    dbname="YOUR_DATABSE",
+    user="YOUR_USERNAME",
+    password="YOUR_PASSWORD",
+    host="YOUR_HOST"
 )
 cursor = conn.cursor()
 cursor.execute("SELECT crash_id, crash_speed_limit FROM public.atd_txdot_crashes")
