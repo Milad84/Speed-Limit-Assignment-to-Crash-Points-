@@ -43,7 +43,7 @@ The final Code contains the most recent attempt. All the other numbered attempts
 
 - ArcGIS Pro
 - ArcPy
-- psycopg2 (for PostgreSQL connection)
+- psycopg2 (for PostgreSQL Database connection)
 
 ## Usage Instructions
 
