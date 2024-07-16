@@ -3,12 +3,12 @@ import os
 import psycopg2
 
 # Define the input feature classes
-streets_fc = "CTN_AFP_Subset_2" #REMEMBER TO REPLACE TO YOUR PATH
-crashes_fc = "Crashes_Subset_2" #REMEMBER TO REPLACE TO YOUR PATH
-intersections_fc = "Intersections" #REMEMBER TO REPLACE TO YOUR PATH
+streets_fc = "CTN_AFP_Subset_2"
+crashes_fc = "Crashes_Subset_2"
+intersections_fc = "Intersections"
 
 # Define the project geodatabase
-project_gdb = "G:/ATD/ACTIVE TRANS/Vision Zero/GIS/Speed Limit Implemetation/Speed Limit Implemetation.gdb" #REMEMBER TO REPLACE TO YOUR PATH
+project_gdb = "G:/ATD/ACTIVE TRANS/Vision Zero/GIS/Speed Limit Implemetation/Speed Limit Implemetation.gdb"
 buffer_fc = os.path.join(project_gdb, "Customized_Buffers")
 output_copy_fc = os.path.join(project_gdb, "Crashes_Subset_2_Copy")
 
@@ -166,7 +166,7 @@ try:
 
     with arcpy.da.UpdateCursor(output_copy_fc, ["OBJECTID", "SHAPE@", "Assigned_Speed_Limit", "Near_Intersection", "Crash_Id", "DB_Speed_Limit"]) as cursor:
         for row in cursor:
-            crash_id = row[0]
+            crash_id = row[4]  # Corrected index for Crash_Id in the cursor
             point = row[1]
 
             # Check if crash point is within any buffer
@@ -175,14 +175,12 @@ try:
 
             if row[3] == 1:
                 # Get the highest speed limit from intersecting street segments within the buffer
-                intersecting_speeds = [
-                    street_row[1]
-                    for buffer_shape in buffer_shapes
-                    if buffer_shape.contains(point)
-                    for street_row in arcpy.da.SearchCursor(streets_fc, ["SHAPE@", "SPEED_LIMIT"])
-                    if street_row[0].crosses(buffer_shape)
-                ]
-                intersecting_speeds = [speed for speed in intersecting_speeds if speed is not None]
+                intersecting_speeds = []
+                for buffer_shape in buffer_shapes:
+                    if buffer_shape.contains(point):
+                        for street_row in arcpy.da.SearchCursor(streets_fc, ["SHAPE@", "SPEED_LIMIT"]):
+                            if street_row[0].crosses(buffer_shape) and street_row[1] is not None:
+                                intersecting_speeds.append(street_row[1])
                 if intersecting_speeds:
                     row[2] = max(intersecting_speeds)
             else:
@@ -194,13 +192,14 @@ try:
                         street_line = street_row[0]
                         speed_limit = street_row[1]
                         distance = point.distanceTo(street_line)
-                        if distance < nearest_distance:
+                        if distance < nearest_distance and speed_limit is not None:
                             nearest_distance = distance
                             nearest_street = speed_limit
 
                 # Assign the speed limit from the nearest street
                 if nearest_street is not None:
                     row[2] = nearest_street
+
             cursor.updateRow(row)
 
             # Log progress
@@ -213,22 +212,25 @@ try:
 
     # Connect to the PostgreSQL database and retrieve speed limits
     conn = psycopg2.connect(
-        dbname="YOUR_DATABASE",
+        dbname="YOUR_DATABSE",
         user="YOUR_USERNAME",
         password="YOUR_PASSWORD",
         host="YOUR_HOST"
-    )
+)
     cursor = conn.cursor()
     cursor.execute("SELECT crash_id, crash_speed_limit FROM public.atd_txdot_crashes")
     db_speed_limits = cursor.fetchall()
 
     # Create a dictionary from the database results
-    speed_limit_dict = {row[0]: row[1] for row in db_speed_limits}
+    speed_limit_dict = {str(row[0]): row[1] for row in db_speed_limits}
+
+    # Debug print to verify dictionary content
+    print(f"Speed limit dictionary: {speed_limit_dict}")
 
     # Update the crash points with the speed limit from the database
     with arcpy.da.UpdateCursor(output_copy_fc, ["Crash_Id", "DB_Speed_Limit"]) as cursor:
         for row in cursor:
-            crash_id = row[0]
+            crash_id = str(row[0])  # Ensure crash_id is a string for dictionary lookup
             if crash_id in speed_limit_dict:
                 row[1] = speed_limit_dict[crash_id]
                 cursor.updateRow(row)
@@ -248,5 +250,5 @@ finally:
     else:
         print("Buffers around intersections do not exist.")
 
-    if conn:
+    if 'conn' in locals():
         conn.close()
