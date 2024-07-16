@@ -51,7 +51,7 @@ The final Code contains the most recent attempt. All the other numbered attempts
    - Modify the `streets_fc` variable to point to your street layer (`CTN_AFP_Subset_2`).
    - Modify the `crashes_fc` variable to point to your crash points layer (`Crashes_Subset_2`).
 
-2. **Run the Script:** Execute the script in an ArcGIS Pro environment.
+2. **Run the Script:** Execute the script in an ArcGIS Pro environment (Notebook).
 
 3. **Check Output:** The `Assigned_Speed_Limit` and `DB_Speed_Limit` fields in the `Crashes_Subset_2_Copy` layer will be updated with the appropriate speed limits.
 
