@@ -51,7 +51,8 @@ This repository contains a script that assigns speed limit data from street segm
 3. **Check Output:** The `Assigned_Speed_Limit` and `DB_Speed_Limit` fields in the `Crashes_Subset_2_Copy` layer will be updated with the appropriate speed limits.
 
 4. ![image](https://github.com/user-attachments/assets/9bb0f39f-9646-4b6d-8de1-d1ff2ff0a46c)
-   Sample of output table in ArcPro where three new fields bring the results of the code.
+
+    Sample of output table in ArcPro where three new fields bring the results of the code.
 
 
 ## Script Details
