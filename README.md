@@ -36,7 +36,7 @@ The final Code contains the most recent attempt. All the other numbered attempts
 
 ### Database Speed Limit Assignment
 
-- Connects to an AWS PostgreSQL database to retrieve additional speed limits for crash points.
+- Connects to an AWS PostgreSQL database to retrieve additional speed limits for crash points. This speed limit comes from the CR3 form and might be NULL or -1 for crashes where the speed limit is not reported.
 - Updates the crash points with the speed limit from the database.
 
 ## Requirements
