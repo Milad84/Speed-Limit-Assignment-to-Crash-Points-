@@ -26,7 +26,7 @@ The final Code contains the most recent attempt. All the other numbered attempts
 
 ### Street Level Intersection
 
-- Identifies intersection points and determines the street levels of intersecting streets.
+- Identifies intersection points and determines the street levels of intersecting streets. The intersections are created based on another script: https://github.com/Milad84/Point-Intersection-Creation-based-on-Street-Network
 - Creates and updates buffers around these intersection points based on the intersecting street levels.
 
 ### Speed Limit Assignment
