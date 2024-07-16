@@ -86,11 +86,12 @@ def get_buffer_size(street_levels):
 ## Speed Limit Assignment from Street Segments
 The script assigns speed limits to crash points based on their proximity to street segments. For crashes near intersections, the highest speed limit from the intersecting streets within the buffer is used, while the nearest street segment's speed limit is assigned for crashes not near intersections.
 
+```python
 with arcpy.da.UpdateCursor(output_copy_fc, ["OBJECTID", "SHAPE@", "Assigned_Speed_Limit", "Near_Intersection", "Crash_Id", "DB_Speed_Limit"]) as cursor:
     for row in cursor:
         crash_id = row[4]
         point = row[1]
-```python
+
         # Check if crash point is within any buffer
         is_within_buffer = any(buffer_shape.contains(point) for buffer_shape in buffer_shapes)
         row[3] = 1 if is_within_buffer else None
