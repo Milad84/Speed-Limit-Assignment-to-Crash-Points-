@@ -1,7 +1,7 @@
 ![image](https://github.com/user-attachments/assets/649b15e0-660b-44cd-ab12-a359ca112830)
 
 
-Sample of output showing intersection buffer and crash points categorized based on different speed limits. Crashes along the street segments get the speed limit from the street feature. Crashes at the intersection inherit the highest speed from intersecting street segments with the intersection buffer.
+The output sample shows street segments colored based on the speed limit and intersection buffer and crash points categorized based on different speed limits. Crashes along the street segments get the speed limit from the street feature. Crashes at the intersection inherit the highest speed from intersecting street segments with the intersection buffer. A simple spatial join would only assign the speed limit based on the chosen algorithm (closest distance) and not consider the conditionals. That is why there is a need for another algorithm capable of assigning speed limits on other constraints and conditions.
 
 # Speed Limit Assignment to Crash Points
 
