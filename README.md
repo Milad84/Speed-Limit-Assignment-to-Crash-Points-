@@ -9,7 +9,7 @@ This repository contains a series of scripts that assign speed limit data from s
 
 # Final Code
 
-The final Code contains the most recent attempt. All the other numbered attempts are kept for personal records to show how I got to the final version of the code.
+The final Code contains the most recent functioning attempt. All the other numbered attempts are kept for personal records to show how I got to the final version of the code.
 
 ## Features
 
